@@ -19,7 +19,19 @@ func NewPaymentHandler(paymentService service.PaymentService) *PaymentHandler {
 	return &PaymentHandler{paymentService: paymentService}
 }
 
-// InitiatePayment handles POST /api/v1/payments
+// InitiatePayment godoc
+//
+//	@Summary		Initiate a payment
+//	@Description	Creates a new payment record for an existing order and processes it through the payment gateway
+//	@Tags			Payments
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		request.InitiatePaymentRequest	true	"Payment request payload"
+//	@Success		201		{object}	response.SuccessResponse
+//	@Failure		400		{object}	response.ErrorResponse
+//	@Failure		404		{object}	response.ErrorResponse	"Order not found"
+//	@Failure		500		{object}	response.ErrorResponse
+//	@Router			/payments [post]
 func (h *PaymentHandler) InitiatePayment(w http.ResponseWriter, r *http.Request) {
 	var req request.InitiatePaymentRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -36,7 +48,21 @@ func (h *PaymentHandler) InitiatePayment(w http.ResponseWriter, r *http.Request)
 	writeJSON(w, http.StatusCreated, response.NewSuccess(payment))
 }
 
-// Refund handles POST /api/v1/payments/{paymentId}/refund
+// Refund godoc
+//
+//	@Summary		Refund a payment
+//	@Description	Initiates a refund for a completed payment. Only COMPLETED payments can be refunded.
+//	@Tags			Payments
+//	@Accept			json
+//	@Produce		json
+//	@Param			paymentId	path		string					true	"Payment ID"
+//	@Param			body		body		request.RefundRequest	true	"Refund reason"
+//	@Success		200			{object}	response.SuccessResponse
+//	@Failure		400			{object}	response.ErrorResponse
+//	@Failure		404			{object}	response.ErrorResponse
+//	@Failure		409			{object}	response.ErrorResponse	"Payment not eligible for refund"
+//	@Failure		500			{object}	response.ErrorResponse
+//	@Router			/payments/{paymentId}/refund [post]
 func (h *PaymentHandler) Refund(w http.ResponseWriter, r *http.Request) {
 	paymentID := extractPathParam(r.URL.Path, "payments")
 

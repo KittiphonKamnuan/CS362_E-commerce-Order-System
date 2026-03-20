@@ -21,7 +21,22 @@ func NewOrderHandler(orderService service.OrderService) *OrderHandler {
 	return &OrderHandler{orderService: orderService}
 }
 
-// PlaceOrder handles POST /api/v1/orders
+// PlaceOrder godoc
+//
+//	@Summary		Place a new order (Flash Sale)
+//	@Description	Creates an order from the customer's cart. Enforces rate limiting for flash sale. Returns 429 if rate limit exceeded, 409 if stock is insufficient.
+//	@Tags			Orders
+//	@Accept			json
+//	@Produce		json
+//	@Security		CustomerID
+//	@Param			X-Customer-ID	header		string					true	"Customer ID"
+//	@Param			body			body		request.PlaceOrderRequest	true	"Order request payload"
+//	@Success		201				{object}	response.SuccessResponse{data=response.OrderResponse}
+//	@Failure		400				{object}	response.ErrorResponse
+//	@Failure		409				{object}	response.ErrorResponse	"INSUFFICIENT_STOCK"
+//	@Failure		429				{object}	response.ErrorResponse	"RATE_LIMIT_EXCEEDED"
+//	@Failure		500				{object}	response.ErrorResponse
+//	@Router			/orders [post]
 func (h *OrderHandler) PlaceOrder(w http.ResponseWriter, r *http.Request) {
 	customerID := r.Header.Get("X-Customer-ID")
 
@@ -40,7 +55,19 @@ func (h *OrderHandler) PlaceOrder(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, response.NewSuccess(order))
 }
 
-// GetOrder handles GET /api/v1/orders/{orderId}
+// GetOrder godoc
+//
+//	@Summary		Get order by ID
+//	@Description	Retrieves a specific order belonging to the authenticated customer
+//	@Tags			Orders
+//	@Produce		json
+//	@Security		CustomerID
+//	@Param			X-Customer-ID	header		string	true	"Customer ID"
+//	@Param			orderId			path		string	true	"Order ID"
+//	@Success		200				{object}	response.SuccessResponse{data=response.OrderResponse}
+//	@Failure		404				{object}	response.ErrorResponse
+//	@Failure		500				{object}	response.ErrorResponse
+//	@Router			/orders/{orderId} [get]
 func (h *OrderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 	customerID := r.Header.Get("X-Customer-ID")
 	orderID := extractPathParam(r.URL.Path, "orders")
@@ -54,7 +81,19 @@ func (h *OrderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, response.NewSuccess(order))
 }
 
-// ListOrders handles GET /api/v1/orders?page=1&pageSize=10
+// ListOrders godoc
+//
+//	@Summary		List orders for a customer
+//	@Description	Returns paginated order history for the authenticated customer
+//	@Tags			Orders
+//	@Produce		json
+//	@Security		CustomerID
+//	@Param			X-Customer-ID	header		string	true	"Customer ID"
+//	@Param			page			query		int		false	"Page number"		default(1)
+//	@Param			pageSize		query		int		false	"Page size"			default(10)
+//	@Success		200				{object}	response.SuccessResponse{data=response.OrderListResponse}
+//	@Failure		500				{object}	response.ErrorResponse
+//	@Router			/orders [get]
 func (h *OrderHandler) ListOrders(w http.ResponseWriter, r *http.Request) {
 	customerID := r.Header.Get("X-Customer-ID")
 	page := queryInt(r, "page", 1)
@@ -69,7 +108,20 @@ func (h *OrderHandler) ListOrders(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, response.NewSuccess(orders))
 }
 
-// CancelOrder handles PATCH /api/v1/orders/{orderId}/cancel
+// CancelOrder godoc
+//
+//	@Summary		Cancel an order
+//	@Description	Cancels an order if it is in PENDING or CONFIRMED state
+//	@Tags			Orders
+//	@Produce		json
+//	@Security		CustomerID
+//	@Param			X-Customer-ID	header		string	true	"Customer ID"
+//	@Param			orderId			path		string	true	"Order ID"
+//	@Success		200				{object}	response.SuccessResponse{data=response.OrderResponse}
+//	@Failure		404				{object}	response.ErrorResponse
+//	@Failure		409				{object}	response.ErrorResponse	"Order cannot be cancelled"
+//	@Failure		500				{object}	response.ErrorResponse
+//	@Router			/orders/{orderId}/cancel [patch]
 func (h *OrderHandler) CancelOrder(w http.ResponseWriter, r *http.Request) {
 	customerID := r.Header.Get("X-Customer-ID")
 	orderID := extractPathParam(r.URL.Path, "orders")

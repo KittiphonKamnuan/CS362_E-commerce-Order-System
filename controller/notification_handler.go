@@ -17,7 +17,17 @@ func NewNotificationHandler(notificationService service.NotificationService) *No
 	return &NotificationHandler{notificationService: notificationService}
 }
 
-// GetNotifications handles GET /api/v1/notifications
+// GetNotifications godoc
+//
+//	@Summary		Get notifications for a customer
+//	@Description	Returns all notifications for the authenticated customer
+//	@Tags			Notifications
+//	@Produce		json
+//	@Security		CustomerID
+//	@Param			X-Customer-ID	header		string	true	"Customer ID"
+//	@Success		200				{object}	response.SuccessResponse
+//	@Failure		500				{object}	response.ErrorResponse
+//	@Router			/notifications [get]
 func (h *NotificationHandler) GetNotifications(w http.ResponseWriter, r *http.Request) {
 	customerID := r.Header.Get("X-Customer-ID")
 
@@ -30,7 +40,19 @@ func (h *NotificationHandler) GetNotifications(w http.ResponseWriter, r *http.Re
 	writeJSON(w, http.StatusOK, response.NewSuccess(notifications))
 }
 
-// MarkAsRead handles PATCH /api/v1/notifications/{notificationId}/read
+// MarkAsRead godoc
+//
+//	@Summary		Mark notification as read
+//	@Description	Marks a specific notification as read for the customer
+//	@Tags			Notifications
+//	@Produce		json
+//	@Security		CustomerID
+//	@Param			X-Customer-ID		header		string	true	"Customer ID"
+//	@Param			notificationId		path		string	true	"Notification ID"
+//	@Success		200					{object}	response.SuccessResponse
+//	@Failure		404					{object}	response.ErrorResponse
+//	@Failure		500					{object}	response.ErrorResponse
+//	@Router			/notifications/{notificationId}/read [patch]
 func (h *NotificationHandler) MarkAsRead(w http.ResponseWriter, r *http.Request) {
 	notificationID := extractPathParam(r.URL.Path, "notifications")
 
