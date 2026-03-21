@@ -9,11 +9,19 @@
 CS362_E-commerce/
 ├── cmd/
 │   └── server/
-│       └── main.go          # Server entry point
-├── handler/                 # HTTP request handlers (Controller layer)
-├── model/                   # Data structures (Entity layer)
-├── service/                 # Business logic layer
-├── repository/              # Database access layer
+│       └── main.go               # Server entry point
+├── handler/                      # HTTP request handlers (Controller layer)
+│   ├── order_handler.go          # Feature A: ไผ่
+│   └── payment_handler.go        # Feature B: แฮม
+├── service/                      # Business logic layer
+│   ├── order_service.go          # Feature A: มิว
+│   └── payment_service.go        # Feature B: ครีม
+├── repository/                   # Database access layer
+│   ├── order_repository.go       # Feature A: หนุ่ม
+│   └── payment_repository.go     # Feature B: มาร์ค
+├── model/                        # Data structures (Entity layer)
+│   ├── order.go
+│   └── payment.go
 ├── go.mod
 ├── classdiagram.mmd
 ├── usecase.mmd
