@@ -251,7 +251,7 @@ CONFIRMED → CANCELLED
 |----|--------|---------|
 | หนุ่ม | `feat-A/handler` | API Spec + รับ Request (PlaceOrder Flow) |
 | มิว | `feat-A/service` | Business Logic (Order + Inventory + RateLimiter) |
-| หนุ่ม | `feat-A/repository` | Database Mapping (Order + Inventory) |
+| ไผ่ | `feat-A/repository` | Database Mapping (Order + Inventory) |
 | แฮม | `feat-B/handler` | API Spec + รับ Request (Payment & Notification) |
 | ครีม | `feat-B/service` | Business Logic (Payment + Notification) |
 | มาร์ค | `feat-B/repository` | Database Mapping (Payment + Notification) |
