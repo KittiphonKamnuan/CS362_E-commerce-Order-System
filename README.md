@@ -249,12 +249,12 @@ CONFIRMED → CANCELLED
 
 | คน | Branch | หน้าที่ |
 |----|--------|---------|
-| Member 1 | `feat-A/handler` | API Spec + รับ Request (PlaceOrder Flow) |
-| Member 2 | `feat-A/service` | Business Logic (Order + Inventory + RateLimiter) |
-| Member 3 | `feat-A/repository` | Database Mapping (Order + Inventory) |
-| Member 4 | `feat-B/handler` | API Spec + รับ Request (Payment & Notification) |
-| Member 5 | `feat-B/service` | Business Logic (Payment + Notification) |
-| Member 6 | `feat-B/repository` | Database Mapping (Payment + Notification) |
+| หนุ่ม | `feat-A/handler` | API Spec + รับ Request (PlaceOrder Flow) |
+| มิว | `feat-A/service` | Business Logic (Order + Inventory + RateLimiter) |
+| หนุ่ม | `feat-A/repository` | Database Mapping (Order + Inventory) |
+| ครีม | `feat-B/handler` | API Spec + รับ Request (Payment & Notification) |
+| แฮม | `feat-B/service` | Business Logic (Payment + Notification) |
+| มาร์ค | `feat-B/repository` | Database Mapping (Payment + Notification) |
 
 ---
 
